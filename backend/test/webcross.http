@@ -1,0 +1,39 @@
+### Health check
+GET http://localhost:3000/api/healthz
+Accept: application/json
+
+###
+
+### List all puzzles
+GET http://localhost:3000/api/puzzles
+Accept: application/json
+
+###
+
+### Get puzzle by ID
+GET http://localhost:3000/api/puzzles/1
+Accept: application/json
+
+###
+
+### Start a puzzle session (sets cookie)
+POST http://localhost:3000/api/puzzles/1/start
+Accept: application/json
+
+###
+
+### Send a voxel destruction attempt
+POST http://localhost:3000/api/puzzles/1/actions
+Content-Type: application/json
+
+{
+  "x": 0,
+  "y": 0,
+  "z": 0
+}
+
+###
+
+### Notify puzzle completion
+POST http://localhost:3000/api/puzzles/1/complete
+Accept: application/json
