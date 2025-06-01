@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
 cmd = "go build -o ./tmp/main ./cmd/server"
 bin = "tmp/main"
-full_bin = "true"
+full_bin = true
 watch_dir = "."
 include_ext = ["go", "tpl", "tmpl", "html"]
 exclude_dir = ["tmp", "frontend", "node_modules"]

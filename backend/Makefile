@@ -1,6 +1,6 @@
 # Project configuration
 APP_NAME = Webcross
-CMD_DIR = ./cmd/server
+CMD_DIR = .
 OPENAPI_SPEC = ./api/openapi.yaml
 GEN_SPECS_CONFIG = ./api/specs.gen.yaml
 GEN_STUBS_CONFIG = ./api/stubs.gen.yaml
@@ -26,7 +26,7 @@ build:
 
 run: generate
 	@echo "Running server..."
-	@command -v air >/dev/null 2>&1 && air || go run ./cmd/server
+	@command -v air >/dev/null 2>&1 && air || go run .
 
 
 clean:

@@ -43,7 +43,7 @@ func (p *Puzzle) ValidateVoxel(x, y, z int) (correct bool, err error) {
 	}
 
 	// Check the voxel
-	if !p.Grid[z][y][x] {
+	if p.Grid[z][y][x] {
 		return false, ErrIncorrectVoxel
 	}
 

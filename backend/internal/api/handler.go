@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/28Pollux28/webcross3d/internal/puzzle"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"time"
 )
@@ -48,6 +49,11 @@ func (h *Handler) GetApiPuzzlesId(ctx *fiber.Ctx, id string) error {
 }
 
 func (h *Handler) PostApiPuzzlesIdStart(ctx *fiber.Ctx, id string) error {
+	// Get the old session and destroy it
+	old, err := h.SessionStore.Get(ctx)
+	if err == nil {
+		_ = old.Destroy()
+	}
 	sess, err := h.SessionStore.Get(ctx)
 	if err != nil {
 		return err
@@ -60,9 +66,10 @@ func (h *Handler) PostApiPuzzlesIdStart(ctx *fiber.Ctx, id string) error {
 
 	sess.Set("puzzle_id", id)
 	sess.Set("lives", p.Lives)
-	sess.Set("start_time", time.Now())
+	sess.Set("start_time", time.Now().UnixMilli())
 	err = sess.Save()
 	if err != nil {
+		log.Debugf("failed to save session: %v", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "failed to save session",
 		})
@@ -152,7 +159,8 @@ func (h *Handler) PostApiPuzzlesIdActions(ctx *fiber.Ctx, id string) error {
 	completed := p.IsComplete(removed)
 
 	if completed {
-		startTime, _ := sess.Get("start_time").(time.Time)
+		startTimeMillis, _ := sess.Get("start_time").(int64)
+		startTime := time.UnixMilli(startTimeMillis)
 		elapsed := int(time.Since(startTime).Seconds())
 
 		return ctx.JSON(ActionResult{
@@ -164,6 +172,7 @@ func (h *Handler) PostApiPuzzlesIdActions(ctx *fiber.Ctx, id string) error {
 	}
 	err = sess.Save()
 	if err != nil {
+		log.Debugf("failed to save session: %v", err)
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to save session"})
 	}
 

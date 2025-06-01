@@ -9,6 +9,7 @@ var puzzleStore = map[string]*Puzzle{
 			{{true, false}, {false, false}},
 			{{false, false}, {true, true}},
 		},
+		Lives: 5,
 		SizeX: 2,
 		SizeY: 2,
 		SizeZ: 2,

@@ -1,6 +1,7 @@
-package main
+package server
 
 import (
+	"encoding/gob"
 	"github.com/28Pollux28/webcross3d/internal/api"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -9,7 +10,12 @@ import (
 
 var sessionStore = session.New()
 
-func main() {
+func init() {
+	// This registers the custom map type for session encoding
+	gob.Register(map[[3]int]bool{})
+}
+
+func Main() {
 	app := fiber.New()
 
 	// Create your handler
